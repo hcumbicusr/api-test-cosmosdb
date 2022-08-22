@@ -11,10 +11,9 @@ const { urldrive } = require('../config');
 
 var router = express.Router();
 
-router.get('/:fechainicio/:fechafin/:flagcerrado', async function (req, res, next) {
+router.get('/:fechainicio/:fechafin/', async function (req, res, next) {
   var fechainicio = req.params.fechainicio;
   var fechafin = req.params.fechafin;
-  var flagcerrado = req.params.flagcerrado;
 
   // Buscar las cotizaciones en ADN - MYSQL
   var [resultsADN] = await pool.query("SELECT " +
@@ -26,8 +25,8 @@ router.get('/:fechainicio/:fechafin/:flagcerrado', async function (req, res, nex
     "FROM siv_db.solicitud  s " +
     "LEFT JOIN persona p ON s.id_asegurado=p.id_persona " +
     "WHERE " +
-    "fecha_solicitud>= '" + fechainicio + " 00:00:00' AND  fecha_solicitud<= '" + fechafin + " 23:59:59' " + //busqueda por fecha
-    "AND ( (numero_poliza  is not NULL AND " + flagcerrado + "=1) OR " + flagcerrado + "=0 );"); // flag cotizaciones cotizaciones abiertas:0 cotizaciones cerradas:1
+    "s.fecha_crea>= '" + fechainicio + " 00:00:00' AND s.fecha_crea<= '" + fechafin + " 23:59:59' " + //busqueda por fecha de cotizacion
+    "AND fecha_solicitud is not NULL;"); // cotizacion con solicitud finalizada
 
   var cotizaciones = [];
   var personas = [];
