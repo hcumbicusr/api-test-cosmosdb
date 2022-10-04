@@ -20,7 +20,7 @@ router.get('/:fechainicio/:fechafin/', async function (req, res, next) {
     "numero_cotizacion," +
     "case p.tipo_documento when 1 then 'DNI' when 2 then 'CARNET DE EXTRANJERIA' END AS tipo_documento, " +
     "p.numero_documento, " +
-    "CONCAT('EN.',numero_cotizacion,'.',p.numero_documento,'.PDF') AS nombrearchivo, " +
+    "CONCAT('EN_',numero_cotizacion,'_',p.numero_documento,'.PDF') AS nombrearchivo, " +
     "'' AS idpersona " +
     "FROM siv_db.solicitud  s " +
     "LEFT JOIN persona p ON s.id_asegurado=p.id_persona " +
