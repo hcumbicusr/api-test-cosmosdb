@@ -18,10 +18,10 @@
     "mysql": "^2.18.1",
     "mysql2": "^2.2.5",
     "node-fetch": "^2.6.7",
-    "nodemon": "^2.0.4",
     "pg-promise": "^10.8.6"
   },
   "devDependencies": {
+    "nodemon": "^2.0.4",
     "dotenv": "^8.2.0"
   }
 }
