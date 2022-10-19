@@ -1,12 +1,10 @@
-version: '3.4'
+version: '3.8'
 
 services:
-  nodeproject:
-    image: nodeproject
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    environment:
-      NODE_ENV: production
+  api-vida-edn:
+    image: harbor.interseguro.com.pe/siv/api-vida-edn:dev
+    container_name: api-vida-edn
+    restart: unless-stopped
+    env_file: .env
     ports:
-      - 3000:3000
+      - "3063:8080"
