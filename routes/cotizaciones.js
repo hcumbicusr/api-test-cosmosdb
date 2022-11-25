@@ -29,12 +29,11 @@ router.get('/:fechainicio/:fechafin/', async function (req, res, next) {
   let personas = [];
   let personas_buscar = [];
 
-  console.log('Se encontraron ' + resultsADN.length + ' registros')
+  console.log('Se encontraron ' + resultsADN.length + ' registros en ADN')
   let i=0;
   for (const elementADN of resultsADN) {
     i=i+1;
-    console.log(i + '/'+ resultsADN.length+': ', elementADN.numero_cotizacion, elementADN.tipo_documento, elementADN.numero_documento);
-    
+    // console.log(i + '/'+ resultsADN.length+': ', elementADN.numero_cotizacion, elementADN.tipo_documento, elementADN.numero_documento);
     cotizaciones.push({
       num_solicitud: elementADN.numero_cotizacion,
       tipo_documento: elementADN.tipo_documento, 
@@ -47,20 +46,18 @@ router.get('/:fechainicio/:fechafin/', async function (req, res, next) {
     personas.push(elementADN.tipo_documento+"-"+elementADN.numero_documento);
     personas_buscar.push(data);
   }
+  console.log("cotizaciones total=",cotizaciones.length);
 
   const personasmongo = await getPersonas(personas_buscar);
-  console.log("personasmongo", personasmongo);
 
   for (let cotizacion of cotizaciones) {
-    const personanomgo = personasmongo.find(function(element) {
-      if (element.TIPO_DOCUMENTO == cotizacion.tipo_documento && element.NUMERO_DOCUMENTO == cotizacion.num_documento) return element;
-      return null;
-    });
-    if ( personanomgo.ID_PERSONA ) {
-      const ID_PERSONA = personanomgo.ID_PERSONA.toLowerCase();
-      console.log(`ID_PERSONA[${cotizacion.tipo_documento}-${cotizacion.num_documento}]:`, ID_PERSONA);
-      cotizacion.ruta_cloud_storage = ID_PERSONA + '/' + cotizacion.ruta_cloud_storage;
-    }
+    const personamongo = personasmongo.find(element => element.TIPO_DOCUMENTO == cotizacion.tipo_documento && element.NUMERO_DOCUMENTO == cotizacion.num_documento);
+    if (personamongo == null) continue;
+    if ( personamongo.ID_PERSONA == null || personamongo.ID_PERSONA == undefined || personamongo.ID_PERSONA == "" ) continue;
+    
+    const ID_PERSONA = personamongo.ID_PERSONA.toLowerCase();
+    // console.log(`ID_PERSONA[${cotizacion.tipo_documento}-${cotizacion.num_documento}]:`, ID_PERSONA);
+    cotizacion.ruta_cloud_storage = ID_PERSONA + '/' + cotizacion.ruta_cloud_storage;
   }
   res.json(cotizaciones);
 });
@@ -78,10 +75,12 @@ async function getPersona(tipodoc, numdoc) {
 
 async function getPersonas(buscar) {
   let query = {$or: buscar};
-  console.log("query", query)
+  // console.log("query", query)
   let mongo_persona = poolMG.get('persona_documento');
+  console.log("antes de query mongo", new Date().toTimeString());
   let results = await mongo_persona.find(query);
-  console.log("results", results);
+  console.log("después de query mongo", new Date().toTimeString());
+  console.log("results total=", results.length);
   return results;
 }
 
