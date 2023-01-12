@@ -11,7 +11,7 @@ const router = express.Router();
 router.get('/:fechainicio/:fechafin/', async function (req, res, next) {
   const fechainicio = req.params.fechainicio;
   const fechafin = req.params.fechafin;
-
+  const fechaInicioEDN = '2022-12-19';
   // Buscar las cotizaciones en ADN - MYSQL
   let query = `SELECT 
       numero_cotizacion,
@@ -21,7 +21,9 @@ router.get('/:fechainicio/:fechafin/', async function (req, res, next) {
     FROM siv_db.solicitud  s 
     INNER JOIN siv_db.solicitud_producto sp on s.id_solicitud = sp.id_solicitud
     LEFT JOIN persona p ON s.id_asegurado = p.id_persona 
-    WHERE str_to_date(sp.fecha_cotizacion, '%d/%m/%Y') >= '${fechainicio} 00:00:00' AND str_to_date(sp.fecha_cotizacion, '%d/%m/%Y')  <= '${fechafin} 23:59:59';`;
+    WHERE str_to_date(sp.fecha_cotizacion, '%d/%m/%Y') >= '${fechaInicioEDN}' AND 
+        str_to_date(sp.fecha_cotizacion, '%d/%m/%Y') >= '${fechainicio} 00:00:00' AND 
+        str_to_date(sp.fecha_cotizacion, '%d/%m/%Y')  <= '${fechafin} 23:59:59';`;
   console.log("Query", query);
   const [resultsADN] = await pool.query(query); // cotizacion con solicitud finalizada
 
