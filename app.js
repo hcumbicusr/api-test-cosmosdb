@@ -7,7 +7,6 @@ var cors = require('cors');
 const {cors_url} = require('./config');
 
 var indexRouter = require('./routes/index');
-var cotizacionesRouter = require('./routes/cotizaciones');
 
 var app = express();
 
@@ -35,7 +34,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/v1/', indexRouter);
-app.use('/api/v1/cotizaciones', cotizacionesRouter);
 
 // catch 404 and forward to error handler
 // error handler

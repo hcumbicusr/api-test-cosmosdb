@@ -13,6 +13,7 @@ module.exports = {
     mongodb_password: process.env.EDN_MONGO_PASS,
     mongodb_name: process.env.EDN_MONGO_DB,
     urlpersona:process.env.API_DOCUMENTO_URL,
-    urldrive:process.env.API_CLOUDSTORAGE
+    urldrive:process.env.API_CLOUDSTORAGE,
+    MONGO_URI: process.env.MONGO_URI,
   };
   
