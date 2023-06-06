@@ -6,6 +6,17 @@ const client = require('../dbase/Mongoconnection');
 const dbname = "testdb-cosmos";
 const collection_testcollection = "testcollection";
 
+async function main() {
+  let result = null;
+  console.log("main test");
+  try {
+      result = await listCollection(client);
+  } catch (error) {
+      console.log({"success": false, "error": error});
+  }
+  console.log({"success": true, "result": result});
+}
+main();
 
 router.post('/test/save', async (req, res) => {    
   let i = 0;
