@@ -1,5 +1,14 @@
-/*const monk = require('monk');
-const {mongodb_host, mongodb_name, mongodb_port, mongodb_username, mongodb_password} = require('../config');
-const db = monk(`${mongodb_username}:${mongodb_password}@${mongodb_host}:${mongodb_port}/${mongodb_name}`);
+const {MONGO_URI} = require('../config');
 
-module.exports = db;*/
+const { MongoClient } = require('mongodb');
+const client = new MongoClient(MONGO_URI);
+
+(async() => {
+    try {
+        await client.connect();
+    } catch(error) {
+        console.error(error);
+    }
+});
+
+module.exports = client;
